@@ -1,1 +1,1 @@
-Install library with command  > npm i textrank
+Install package with command  > npm i textrank
