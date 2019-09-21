@@ -1,0 +1,1 @@
+Install library with command  > npm i textrank
