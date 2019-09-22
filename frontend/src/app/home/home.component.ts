@@ -20,13 +20,13 @@ export class HomeComponent implements OnInit {
   public isRecording: boolean = false;
   public isSummary: boolean = false;
   public summary: string;
+  public isLoading: boolean = false;
 
   startRecording() {
     this.isRecording = true;
     navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(this.handleSuccess.bind(this));
   }
   quote: string | undefined;
-  isLoading = false;
   @ViewChild('player', { static: false }) player: ElementRef;
 
   constructor(private quoteService: QuoteService, private http: HttpClient) {}
@@ -53,6 +53,8 @@ export class HomeComponent implements OnInit {
   }
   loadSummary(data: any) {
     this.summary = data;
+    this.isSummary = true;
+    this.isLoading = false;
     console.log(data);
   }
   stopRecording() {
@@ -65,6 +67,7 @@ export class HomeComponent implements OnInit {
     this.mediaRecorder.stop();
   }
   public uploadFile(file: File) {
+    this.isLoading = true;
     const audioBlob = new Blob(this.audiochunks, { type: 'audio/mpeg-3' });
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
@@ -76,14 +79,9 @@ export class HomeComponent implements OnInit {
     this.http.post('http://10.33.0.107:3000/', formData).subscribe(data => this.loadSummary(data));
   }
   ngOnInit() {
-    this.isLoading = true;
     this.quoteService
       .getRandomQuote({ category: 'dev' })
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
+      .pipe(finalize(() => {}))
       .subscribe((quote: string) => {
         this.quote = quote;
       });
