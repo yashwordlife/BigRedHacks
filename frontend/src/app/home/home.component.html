@@ -1,10 +1,38 @@
 <div class="container-fluid">
   <div class="jumbotron text-center">
-    <h1>
-      <img class="logo" src="assets/ngx-rocket-logo.png" alt="angular logo" />
-      <span translate>Hello world !</span>
-    </h1>
-    <app-loader [isLoading]="isLoading"></app-loader>
-    <q [hidden]="isLoading">{{ quote }}</q>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button class="btn btn-outline-primary" type="button">Meeting Name</button>
+      </div>
+      <input
+        [(ngModel)]="meetingName"
+        type="text"
+        class="form-control"
+        placeholder="Enter a meeting name"
+        aria-label="Meeting Name"
+        aria-describedby="basic-addon1"
+      />
+    </div>
+    <audio id="player" style="display : block; margin: auto" controls #player></audio>
+    <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+      <button
+        type="button"
+        (click)="startRecording()"
+        class="btn"
+        [ngClass]="{ 'btn-dark': !isRecording, 'btn-danger': isRecording }"
+      >
+        <i class="fas fa-circle"></i>
+      </button>
+      <button type="button" (click)="pauseRecording()" class="btn btn-warning"><i class="fas fa-pause"></i></button>
+      <button type="button" (click)="stopRecording()" class="btn btn-dark"><i class="fas fa-stop"></i></button>
+    </div>
   </div>
+  <button class="btn btn-success uploadButton" (click)="uploadFile()">Summarize</button>
+  <textarea
+    *ngIf="isSummary"
+    class="form-control"
+    id="exampleFormControlTextarea1"
+    [(ngModel)]="summary"
+    rows="5"
+  ></textarea>
 </div>

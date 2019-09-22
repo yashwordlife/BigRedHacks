@@ -7,3 +7,24 @@ q {
   font-size: 1.2rem;
   quotes: "« " " »";
 }
+.btn {
+  cursor: pointer;
+}
+.btn-group {
+  position: relative;
+  top: 30px;
+}
+.jumbotron {
+  margin-top: 50px;
+  margin-bottom: 0px;
+  background: white;
+}
+audio {
+  position: relative;
+  top: 10px;
+}
+.uploadButton {
+  display: block;
+  margin: auto;
+  margin-bottom: 40px;
+}
