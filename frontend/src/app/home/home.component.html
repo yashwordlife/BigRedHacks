@@ -28,8 +28,9 @@
     </div>
   </div>
   <button class="btn btn-success uploadButton" (click)="uploadFile()">Summarize</button>
+  <app-loader [isLoading]="isLoading"></app-loader>
   <textarea
-    *ngIf="isSummary"
+    *ngIf="!isLoading"
     class="form-control"
     id="exampleFormControlTextarea1"
     [(ngModel)]="summary"

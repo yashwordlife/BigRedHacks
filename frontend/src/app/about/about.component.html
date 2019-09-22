@@ -13,7 +13,7 @@
         <tr>
           <th scope="row">{{ i + 1 }}</th>
           <td>{{ meeting?.meeting_name }}</td>
-          <td>{{ meeting?.timestamp }}</td>
+          <td>{{ meeting?.timestamp | date: 'long' }}</td>
           <td><button class="btn btn-primary" (click)="meeting.collapsed = !meeting.collapsed">Expand</button></td>
         </tr>
         <tr *ngIf="meeting?.collapsed">
