@@ -1,8 +1,25 @@
 <div class="container-fluid">
-  <div class="jumbotron text-center">
-    <h1>
-      <span translate>APP_NAME</span>
-    </h1>
-    <p><i class="far fa-bookmark"></i> <span translate>Version</span> {{ version }}</p>
-  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Meeting Name</th>
+        <th scope="col">Date</th>
+        <th scope="col">Expand</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let meeting of meetings; index as i">
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ meeting?.meeting_name }}</td>
+          <td>{{ meeting?.timestamp }}</td>
+          <td><button class="btn btn-primary" (click)="meeting.collapsed = !meeting.collapsed">Expand</button></td>
+        </tr>
+        <tr *ngIf="meeting?.collapsed">
+          <td colspan="4" style="border:none;">{{ meeting?.notes }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
 </div>

@@ -6,7 +6,7 @@
     "ng": "ng",
     "build": "npm run env -s && ng build --prod",
     "start": "npm run env -s && ng serve --proxy-config proxy.conf.js",
-    "serve:sw": "npm run build -s && npx http-server ./dist -p 4200",
+    "serve:sw": "npm run build -s && npx http-server ./dist -p 4202",
     "lint": "ng lint && stylelint \"src/**/*.scss\" --syntax scss && htmlhint \"src\" --config .htmlhintrc",
     "test": "npm run env -s && ng test",
     "test:ci": "npm run env -s && npm run lint -s && ng test --configuration=ci",
