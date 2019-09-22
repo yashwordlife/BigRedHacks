@@ -13,18 +13,54 @@ app.use(bodyparser.urlencoded({
 const uploads= multer({dest : 'uploads/'});
 app.use(bodyparser.json());
 
+// Google firebase database
+
+//Credentials
+const admin = require('firebase-admin');
+let serviceAccount = require('./firebase.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://bigredhack-d7d8d.firebaseio.com'
+});
+
+var db = admin.firestore();
 
 
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://BigRedHacks:<bigredhacks123>@bigredhacks-vrs2y.mongodb.net/test?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true });
-// client.connect(err => {
-//   console.log('Connected');
-//   const collection = client.db("Bigredhacks");
-//   // perform actions on the collection object
-//   client.close();
-// });
+var docRef = db.collection('meeting');
+var sumRef = db.collection('summ');
 
+
+
+function writeUserData(name, notes, timestamp) {
+  console.log("INSIDE writeUSERData");
+  var addMeeting = docRef.add({
+    'meeting_name': name,
+    'notes': notes,
+    'timestamp': timestamp
+  });
+}
+
+
+
+function performSave(meetingName, date, content) {
+  console.log("PERFORM" + meetingName + date+ content);
+  writeUserData(meetingName, content, date);
+  
+}
+
+//Summarizer
+
+var tr = require('textrank'); //library for summarizing
+ 
+function summ(str_1){
+    var textRank = new tr.TextRank(str_1); //str_1 is the string you want summarized
+    var summ_str = textRank.summarizedArticle;
+    return summ_str
+}
+
+
+
+// Speech to Text Function
 async function syncRecognize (filename, encoding, sampleRateHertz, languageCode) {
 
     const Speech = require('@google-cloud/speech');
@@ -53,21 +89,38 @@ app.listen(3000, function() {
 })
 
 
-app.get('/', (req, res) => {
-      
-    
-  })
+app.get('/meetings', (req, res) => {
+  var responseData = [];
+  db.collection('meeting').get()
+  .then((snapshot) => {
+    snapshot.forEach((doc) => {
+      responseData.push(doc.data());
+    });
+    res.send(responseData);
+    })
+  .catch((err) => {
+    console.log('Error getting documents', err);
+  });
 
-  app.post('/',uploads.single('myFile'), function(req,res){
+});
+
+app.post('/',uploads.single('myFile'), function(req,res){
+    console.log(req.file);
     var process = new ffmpeg(req.file.path);
-    process.then(function (audio) {
+    process.then((audio) => {
       audio.fnExtractSoundToMP3('./uploads/abc.mp3', function(error, file) {
         syncRecognize(
           file,
           'MP3',
            16000,
           'en-US'
-        ).then(text => {res.send(text)})
+        ).then(text =>  {
+          var mainText = "";
+          for (item in text[0].results) {
+             if (item == 0) mainText = text[0].results[item].alternatives[0].transcript;
+             else mainText = mainText + "," + text[0].results[item].alternatives[0].transcript;
+          }
+          performSave(req.file.originalname, new Date(), mainText); res.json(mainText)})
         .catch((err) => {
           console.error('ERROR:', err);
         });
@@ -77,11 +130,27 @@ app.get('/', (req, res) => {
         console.log('Error :' + err);
     });
     
-  })
+})
+
+
+
+
 
 
   
-  //MongoDb connection
+
+
+
+
+
+
+
+
+
+
+
+
+//MongoDb connection
 // const MongoClient = require('mongodb').MongoClient;
 // const uri = "mongodb+srv://BigRedHacks:<bigredhacks123>@bigredhacks-vrs2y.mongodb.net/test?retryWrites=true&w=majority";
 // const client = new MongoClient(uri, { useNewUrlParser: true });
@@ -90,5 +159,15 @@ app.get('/', (req, res) => {
 //   //const collection = client.db("test").collection("devices");
 //   // perform actions on the collection object
   
+//   client.close();
+// });
+
+// const MongoClient = require('mongodb').MongoClient;
+// const uri = "mongodb+srv://yashChandra:yashrox@bigredhacks-vrs2y.mongodb.net/test?retryWrites=true&w=majority";
+// const client = new MongoClient(uri, { useNewUrlParser: true });
+// client.connect(err => {
+//   console.log('Connected');
+//   const collection = client.db("Bigredhacks").collection("data");
+//   // perform actions on the collection object
 //   client.close();
 // });

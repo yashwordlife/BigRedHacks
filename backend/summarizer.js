@@ -4,10 +4,7 @@ function summ(str_1){
 
     
     var textRank = new tr.TextRank(str_1); //str_1 is the string you want summarized
-    
     var summ_str = textRank.summarizedArticle;
-    
-
     return summ_str
 }
 
