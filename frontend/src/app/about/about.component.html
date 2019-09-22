@@ -1,4 +1,12 @@
 <div class="container-fluid">
+  <input
+    [(ngModel)]="searchText"
+    (ngModelChange)="applyFilter()"
+    class="form-control mr-sm-2"
+    type="text"
+    placeholder="Search"
+  />
+
   <table class="table">
     <thead>
       <tr>

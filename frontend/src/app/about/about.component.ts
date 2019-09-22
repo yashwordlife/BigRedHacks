@@ -10,15 +10,25 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AboutComponent implements OnInit {
   version: string | null = environment.version;
-  meetings: Object;
+  meetings: any[];
+  ogmeetings: any[];
+  searchText: string;
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.http.get('http://10.33.0.107:3000/meetings').subscribe(data => this.loadData(data));
   }
-  loadData(data: Object) {
+  applyFilter() {
+    this.meetings = this.ogmeetings.filter(meeting => {
+      var meetingText = String(meeting.notes);
+      if (meetingText.indexOf(this.searchText) != -1) return true;
+      return false;
+    });
+  }
+  loadData(data: any) {
     var d = new Date();
     this.meetings = data;
+    this.ogmeetings = this.meetings;
     for (var item in data) {
       data[item].timestamp = d.setTime(data[item].timestamp._seconds * 1000);
       this.meetings[item].timestamp = data[item].timestamp;

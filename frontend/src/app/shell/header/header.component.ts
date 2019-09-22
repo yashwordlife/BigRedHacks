@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService, CredentialsService, I18nService } from '@app/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,8 @@ import { AuthenticationService, CredentialsService, I18nService } from '@app/cor
 })
 export class HeaderComponent implements OnInit {
   menuHidden = true;
-
+  searchText: string;
+  sub: Subject<any>;
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -18,11 +20,14 @@ export class HeaderComponent implements OnInit {
     private i18nService: I18nService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.sub = new Subject();
+  }
 
   toggleMenu() {
     this.menuHidden = !this.menuHidden;
   }
+  applyFilter() {}
 
   setLanguage(language: string) {
     this.i18nService.language = language;
