@@ -16,7 +16,7 @@ export class AboutComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get('http://10.33.0.107:3000/meetings').subscribe(data => this.loadData(data));
+    this.http.get('http://localhost:3000/meetings').subscribe(data => this.loadData(data));
   }
   applyFilter() {
     this.meetings = this.ogmeetings.filter(meeting => {

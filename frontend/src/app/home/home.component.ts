@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
     console.log(this.meetingName);
     let formData = new FormData();
     formData.append('myFile', this.currentFile, this.meetingName);
-    this.http.post('http://10.33.0.107:3000/', formData).subscribe(data => this.loadSummary(data));
+    this.http.post('http://localhost:3000/', formData).subscribe(data => this.loadSummary(data));
   }
   ngOnInit() {
     this.quoteService
