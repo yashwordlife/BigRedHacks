@@ -14,7 +14,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
-    "firebase-admin": "^8.6.0",
+    "firebase-admin": "^11.4.1",
     "mongodb": "^3.3.2",
     "mongodb-schema": "^8.2.5",
     "mongoose": "^5.7.1",
